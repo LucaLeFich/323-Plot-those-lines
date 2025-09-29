@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+
+namespace PTL
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("year");
+            dataTable.Columns.Add("Drivers");
+            dataTable.Columns.Add("Team");
+            dataTable.Columns.Add("Car");
+            dataTable.Columns.Add("Tyre");
+            dataTable.Columns.Add("Laps");
+            dataTable.Columns.Add("Km");
+            dataTable.Columns.Add("Mi");
+            dataTable.Columns.Add("Series");
+            dataTable.Columns.Add("Driver_nationality");
+            dataTable.Columns.Add("Average_speed_kmh");
+            dataTable.Columns.Add("Average_speed_mph");
+            dataTable.Columns.Add("Average_lap_time");
+            string filePath = textBox1.Text;
+            StreamReader streamReader = new StreamReader(filePath);
+            string[] totalData = new string[File.ReadAllLines(filePath).Length];
+            while (!streamReader.EndOfStream)
+            {
+                totalData = streamReader.ReadLine().Split(',');
+                dataTable.Rows.Add(totalData[0], totalData[1], totalData[2],
+                                   totalData[3], totalData[4], totalData[5],
+                                   totalData[6], totalData[7], totalData[8],
+                                   totalData[9], totalData[10], totalData[11], totalData[12]
+                );
+            }
+            DataGridView1.DataSource = dataTable;
+        }
+
+        private void formsPlot1_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
