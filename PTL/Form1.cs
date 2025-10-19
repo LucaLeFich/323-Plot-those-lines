@@ -1,6 +1,9 @@
-using ScottPlot;
-using ScottPlot.WinForms;
+using System;
 using System.Data;
+using ScottPlot;
+using ScottPlot.Statistics;
+using ScottPlot.TickGenerators.TimeUnits;
+using ScottPlot.WinForms;
 
 namespace PTL
 {
@@ -13,6 +16,8 @@ namespace PTL
             InitializeComponent();
         }
 
+
+
         private void Form1_Load(object sender, EventArgs e)
         {
             string csvPath = @"D:\323- programation fonctionnelle\Projet\323-Plot-those-lines\PTL\data_LeMans_race_winners.csv";
@@ -21,15 +26,83 @@ namespace PTL
             string columns = string.Join(", ", csvData.Columns.Cast<DataColumn>().Select(c => c.ColumnName));
             MessageBox.Show("Colonnes disponibles : " + columns);
 
-            double[] years = csvData.AsEnumerable().Select(r => Convert.ToDouble(r["Year"])).ToArray();
-            double[] speeds = csvData.AsEnumerable().Select(r => Convert.ToDouble(r["Average_speed_kmh"])).ToArray();
+            // Conversion avec culture invariante (sans ça il confond "." et ",")
+            var culture = System.Globalization.CultureInfo.InvariantCulture;
 
-            var scatter = formsPlot1.Plot.Add.Scatter(years, speeds);
+            //------------------------------------------ Données CSV -------------------------------------------//
+            double[] years = csvData.AsEnumerable()
+                .Select(r => Convert.ToDouble(r["Year"].ToString(), culture))
+                .ToArray();
+
+            double[] laps = csvData.AsEnumerable()
+                .Select(r => Convert.ToDouble(r["Laps"].ToString(), culture))
+                .ToArray();
+
+            double[] kms = csvData.AsEnumerable()
+                .Select(r => Convert.ToDouble(r["Km"].ToString(), culture))
+                .ToArray();
+
+            double[] miles = csvData.AsEnumerable()
+                .Select(r => Convert.ToDouble(r["Mi"].ToString(), culture))
+                .ToArray();
+
+            double[] avgSpeedsKmh = csvData.AsEnumerable()
+                .Select(r => Convert.ToDouble(r["Average_speed_kmh"].ToString(), culture))
+                .ToArray();
+
+            double[] avgSpeedsMph = csvData.AsEnumerable()
+                .Select(r => Convert.ToDouble(r["Average_speed_mph"].ToString(), culture))
+                .ToArray();
+
+            double[] avgLapTimes = csvData.AsEnumerable()
+                .Select(r => Convert.ToDouble(r["Average_lap_time"].ToString(), culture))
+                .ToArray();
+
+            string?[] drivers = csvData.AsEnumerable()
+                .Select(r => r["Drivers"].ToString())
+                .ToArray();
+
+            string?[] Class = csvData.AsEnumerable()
+                .Select(r => r["Class"].ToString())
+                .ToArray();
+
+            string?[] team = csvData.AsEnumerable()
+                .Select(r => r["Team"].ToString())
+                .ToArray();
+
+            string?[] car = csvData.AsEnumerable()
+                .Select(r => r["Car"].ToString())
+                .ToArray();
+
+            string?[] tyre = csvData.AsEnumerable()
+               .Select(r => r["Tyre"].ToString())
+               .ToArray();
+
+            string?[] series = csvData.AsEnumerable()
+               .Select(r => r["Series"].ToString())
+               .ToArray();
+
+            string?[] driver_nationality = csvData.AsEnumerable()
+               .Select(r => r["Driver_nationality"].ToString())
+               .ToArray();
+
+            string?[] team_nationality = csvData.AsEnumerable()
+               .Select(r => r["Team_nationality"].ToString())
+               .ToArray();
+            //---------------------------------------------------------------------------------------------------//
+
+
+            formsPlot1.Plot.Add.Scatter(years, avgSpeedsKmh);
             formsPlot1.Plot.Axes.Title.Label.Text = "Vitesse moyenne des vainqueurs au Mans";
             formsPlot1.Plot.Axes.Bottom.Label.Text = "Année";
             formsPlot1.Plot.Axes.Left.Label.Text = "Vitesse moyenne (km/h)";
-
             formsPlot1.Refresh();
+
+            formsPlot2.Plot.Add.Scatter(drivers, years);
+            formsPlot2.Plot.Axes.Title.Label.Text = "Victoire de chaque pilote par année";
+            formsPlot2.Plot.Axes.Bottom.Label.Text = "Pilotes";
+            formsPlot2.Plot.Axes.Left.Label.Text = "Années";
+            formsPlot2.Refresh();
         }
 
         private DataTable LoadCsvToDataTable(string csvPath)
@@ -54,6 +127,12 @@ namespace PTL
 
         private void formsPlot1_Load(object sender, EventArgs e)
         {
+
+        }
+
+        private void formsPlot2_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

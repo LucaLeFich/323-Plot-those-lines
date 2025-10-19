@@ -7,12 +7,12 @@
       "RelativeMoniker": "D:0:0:{CA91A774-781B-4106-84E9-D1C0FCB7D563}|PTL.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CA91A774-781B-4106-84E9-D1C0FCB7D563}|PTL.csproj|D:\\323- programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{CA91A774-781B-4106-84E9-D1C0FCB7D563}|PTL.csproj|d:\\323- programation fonctionnelle\\projet\\323-plot-those-lines\\ptl\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{CA91A774-781B-4106-84E9-D1C0FCB7D563}|PTL.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CA91A774-781B-4106-84E9-D1C0FCB7D563}|PTL.csproj|d:\\323- programation fonctionnelle\\projet\\323-plot-those-lines\\ptl\\ptl.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{CA91A774-781B-4106-84E9-D1C0FCB7D563}|PTL.csproj|solutionrelative:ptl.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{CA91A774-781B-4106-84E9-D1C0FCB7D563}|PTL.csproj|d:\\323- programation fonctionnelle\\projet\\323-plot-those-lines\\ptl\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CA91A774-781B-4106-84E9-D1C0FCB7D563}|PTL.csproj|solutionrelative:form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,14 +27,15 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "PTL.csproj",
-              "DocumentMoniker": "D:\\323- programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
-              "RelativeDocumentMoniker": "PTL.csproj",
-              "ToolTip": "D:\\323- programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
-              "RelativeToolTip": "PTL.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-09-29T12:01:54.845Z"
+              "Title": "Form1.Designer.cs",
+              "DocumentMoniker": "D:\\323- programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\Form1.Designer.cs",
+              "RelativeDocumentMoniker": "Form1.Designer.cs",
+              "ToolTip": "D:\\323- programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\Form1.Designer.cs",
+              "RelativeToolTip": "Form1.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-01T13:29:33.169Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -44,7 +45,7 @@
               "RelativeDocumentMoniker": "Form1.cs",
               "ToolTip": "D:\\323- programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\Form1.cs",
               "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAA1wBgAAABBAAAAAAAAAA==",
+              "ViewState": "AgIAAGsAAAAAAAAAAAAwwIQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-29T11:51:35.548Z",
               "EditorCaption": ""
@@ -58,7 +59,8 @@
               "ToolTip": "D:\\323- programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\Form1.cs [Conception]",
               "RelativeToolTip": "Form1.cs [Conception]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-29T13:32:09.133Z"
+              "WhenOpened": "2025-10-01T11:36:51.945Z",
+              "EditorCaption": " [Conception]"
             }
           ]
         }
