@@ -42,3 +42,47 @@ D:\323- programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net
 D:\323- programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.pdb
 D:\323- programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.genruntimeconfig.cache
 D:\323- programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\ref\PTL.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\PTL.exe
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\PTL.deps.json
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\PTL.runtimeconfig.json
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\PTL.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\PTL.pdb
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\HarfBuzzSharp.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\OpenTK.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\OpenTK.GLControl.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\ScottPlot.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\ScottPlot.WinForms.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\SkiaSharp.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\SkiaSharp.HarfBuzz.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\SkiaSharp.Views.Desktop.Common.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\SkiaSharp.Views.WindowsForms.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\linux-arm\native\libHarfBuzzSharp.so
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\linux-arm64\native\libHarfBuzzSharp.so
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\linux-musl-x64\native\libHarfBuzzSharp.so
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\linux-x64\native\libHarfBuzzSharp.so
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\osx\native\libHarfBuzzSharp.dylib
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\win-arm64\native\libHarfBuzzSharp.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\win-x64\native\libHarfBuzzSharp.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\win-x86\native\libHarfBuzzSharp.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\linux-arm\native\libSkiaSharp.so
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\linux-arm64\native\libSkiaSharp.so
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\linux-musl-x64\native\libSkiaSharp.so
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\linux-x64\native\libSkiaSharp.so
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\osx\native\libSkiaSharp.dylib
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\win-arm64\native\libSkiaSharp.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\win-x64\native\libSkiaSharp.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\win-x86\native\libSkiaSharp.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.csproj.AssemblyReference.cache
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.Form1.resources
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.csproj.GenerateResource.cache
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.GeneratedMSBuildEditorConfig.editorconfig
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.AssemblyInfoInputs.cache
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.AssemblyInfo.cs
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.csproj.CoreCompileInputs.cache
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.sourcelink.json
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.csproj.Up2Date
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\refint\PTL.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.pdb
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.genruntimeconfig.cache
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\ref\PTL.dll

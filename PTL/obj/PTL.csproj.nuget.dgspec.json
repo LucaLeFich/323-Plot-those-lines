@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\323- programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj": {}
+    "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj": {}
   },
   "projects": {
-    "D:\\323- programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj": {
+    "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\323- programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
+        "projectUniqueName": "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
         "projectName": "PTL",
-        "projectPath": "D:\\323- programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
-        "packagesPath": "C:\\Users\\pq48wkn\\.nuget\\packages\\",
-        "outputPath": "D:\\323- programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\obj\\",
+        "projectPath": "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
+        "packagesPath": "C:\\Users\\lucap\\.nuget\\packages\\",
+        "outputPath": "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\pq48wkn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\lucap\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -38,9 +42,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0-windows7.0": {
@@ -70,7 +74,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
