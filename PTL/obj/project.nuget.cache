@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Lip6WjVUg3Y=",
+  "dgSpecHash": "cLCDP1G6x9k=",
   "success": true,
   "projectFilePath": "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
   "expectedPackageFiles": [
@@ -27,8 +27,10 @@
     {
       "code": "NU1701",
       "level": "Warning",
-      "warningLevel": 1,
       "message": "Le package 'OpenTK 3.1.0' a été restauré en utilisant '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' au lieu du framework cible du projet 'net8.0-windows7.0'. Ce package n'est peut-être pas totalement compatible avec votre projet.",
+      "projectPath": "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
+      "warningLevel": 1,
+      "filePath": "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
       "libraryId": "OpenTK",
       "targetGraphs": [
         "net8.0-windows7.0"
@@ -37,8 +39,10 @@
     {
       "code": "NU1701",
       "level": "Warning",
-      "warningLevel": 1,
       "message": "Le package 'OpenTK.GLControl 3.1.0' a été restauré en utilisant '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' au lieu du framework cible du projet 'net8.0-windows7.0'. Ce package n'est peut-être pas totalement compatible avec votre projet.",
+      "projectPath": "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
+      "warningLevel": 1,
+      "filePath": "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
       "libraryId": "OpenTK.GLControl",
       "targetGraphs": [
         "net8.0-windows7.0"
