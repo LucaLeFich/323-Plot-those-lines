@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             formsPlot1 = new ScottPlot.WinForms.FormsPlot();
+            buttonToggleUnit = new Button();
             SuspendLayout();
             // 
             // formsPlot1
@@ -40,11 +41,22 @@
             formsPlot1.TabIndex = 0;
             formsPlot1.Load += formsPlot1_Load;
             // 
+            // buttonToggleUnit
+            // 
+            buttonToggleUnit.Location = new Point(12, 12);
+            buttonToggleUnit.Name = "buttonToggleUnit";
+            buttonToggleUnit.Size = new Size(150, 23);
+            buttonToggleUnit.TabIndex = 1;
+            buttonToggleUnit.Text = "Afficher en mph";
+            buttonToggleUnit.UseVisualStyleBackColor = true;
+            buttonToggleUnit.Click += ToggleSpeedButton_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1265, 732);
+            Controls.Add(buttonToggleUnit);
             Controls.Add(formsPlot1);
             Name = "Form1";
             Text = "Form1";
@@ -55,5 +67,6 @@
         #endregion
 
         private ScottPlot.WinForms.FormsPlot formsPlot1;
+        private System.Windows.Forms.Button buttonToggleUnit;
     }
 }

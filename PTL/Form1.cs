@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Microsoft.VisualBasic.FileIO;
 using ScottPlot;
 using ScottPlot.Statistics;
+using ScottPlot.TickGenerators;
 using ScottPlot.TickGenerators.TimeUnits;
 using ScottPlot.WinForms;
 
@@ -16,6 +17,13 @@ namespace PTL
     public partial class Form1 : Form
     {
         private DataTable csvData;
+
+        // champs pour conserver les données et état d'unité
+        private double[] years = Array.Empty<double>();
+        private double[] avgSpeedsKmh = Array.Empty<double>();
+        private double[] avgSpeedsMph = Array.Empty<double>();
+        private string[] teams = Array.Empty<string>();
+        private bool showingKmh = true;
 
         public Form1()
         {
@@ -34,13 +42,17 @@ namespace PTL
             var culture = CultureInfo.InvariantCulture;
 
             //------------------------------------------ Données CSV -------------------------------------------//
-            double[] years = ToDoubleArray(csvData, "Year", culture);
-            double[] laps = ToDoubleArray(csvData, "Laps", culture);
-            double[] kms = ToDoubleArray(csvData, "Km", culture);
-            double[] miles = ToDoubleArray(csvData, "Mi", culture);
-            double[] avgSpeedsKmh = ToDoubleArray(csvData, "Average_speed_kmh", culture);
-            double[] avgSpeedsMph = ToDoubleArray(csvData, "Average_speed_mph", culture);
-            double[] avgLapTimes = ToDoubleArray(csvData, "Average_lap_time", culture);
+            years = ToDoubleArray(csvData, "Year", culture);
+            var laps = ToDoubleArray(csvData, "Laps", culture);
+            var kms = ToDoubleArray(csvData, "Km", culture);
+            var miles = ToDoubleArray(csvData, "Mi", culture);
+            avgSpeedsKmh = ToDoubleArray(csvData, "Average_speed_kmh", culture);
+            avgSpeedsMph = ToDoubleArray(csvData, "Average_speed_mph", culture);
+            var avgLapTimes = ToDoubleArray(csvData, "Average_lap_time", culture);
+
+            teams = csvData.AsEnumerable()
+                .Select(r => r["Team"]?.ToString() ?? string.Empty)
+                .ToArray();
 
             string?[] drivers = csvData.AsEnumerable()
                 .Select(r => r["Drivers"]?.ToString() ?? string.Empty)
@@ -48,10 +60,6 @@ namespace PTL
 
             string?[] classes = csvData.AsEnumerable()
                 .Select(r => r["Class"]?.ToString() ?? string.Empty)
-                .ToArray();
-
-            string?[] team = csvData.AsEnumerable()
-                .Select(r => r["Team"]?.ToString() ?? string.Empty)
                 .ToArray();
 
             string?[] car = csvData.AsEnumerable()
@@ -75,14 +83,41 @@ namespace PTL
                .ToArray();
             //---------------------------------------------------------------------------------------------------//
 
-            // Plot 1 : années vs vitesse moyenne (assure mêmes longueurs)
-            int n = Math.Min(years.Length, avgSpeedsKmh.Length);
+            // initial plot en km/h
+            UpdateSpeedPlot();
+        }
+
+        private void ToggleSpeedButton_Click(object? sender, EventArgs e)
+        {
+            // bascule l'état et met à jour l'affichage
+            showingKmh = !showingKmh;
+
+            if (sender is Button b)
+                b.Text = showingKmh ? "Afficher en mph" : "Afficher en km/h";
+
+            UpdateSpeedPlot();
+        }
+
+        private void UpdateSpeedPlot()
+        {
+            // protège contre données manquantes
+            if (years == null || (avgSpeedsKmh == null && avgSpeedsMph == null))
+                return;
+
+            // choisit le tableau de vitesses
+            var speeds = showingKmh ? avgSpeedsKmh : avgSpeedsMph;
+
+            // s'assure longueurs compatibles
+            int n = Math.Min(years.Length, speeds.Length);
             var yearsTrim = years.Take(n).ToArray();
-            var avgSpeedsTrim = avgSpeedsKmh.Take(n).ToArray();
-            formsPlot1.Plot.Add.Scatter(yearsTrim, avgSpeedsTrim);
+            var speedsTrim = speeds.Take(n).ToArray();
+
+            // remplace le contenu du plot et rafraîchit
+            formsPlot1.Plot.Clear();
+            formsPlot1.Plot.Add.Scatter(yearsTrim, speedsTrim);
             formsPlot1.Plot.Axes.Title.Label.Text = "Vitesse moyenne des vainqueurs au Mans";
             formsPlot1.Plot.Axes.Bottom.Label.Text = "Année";
-            formsPlot1.Plot.Axes.Left.Label.Text = "Vitesse moyenne (km/h)";
+            formsPlot1.Plot.Axes.Left.Label.Text = showingKmh ? "Vitesse moyenne (km/h)" : "Vitesse moyenne (mph)";
             formsPlot1.Refresh();
         }
 
