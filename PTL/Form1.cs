@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.VisualBasic.FileIO;
 using ScottPlot;
@@ -25,6 +26,9 @@ namespace PTL
         private string[] teams = Array.Empty<string>();
         private bool showingKmh = true;
 
+        // label d'affichage de la plage
+        private System.Windows.Forms.Label lblRange = null!;
+
         public Form1()
         {
             InitializeComponent();
@@ -32,6 +36,7 @@ namespace PTL
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //--------------------------------------- !! A CHANGER SELON LA MACHINE !! ---------------------------------------\\
             string csvPath = @"H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\data_LeMans_race_winners.csv";
             csvData = LoadCsvToDataTable(csvPath);
 
@@ -83,7 +88,59 @@ namespace PTL
                .ToArray();
             //---------------------------------------------------------------------------------------------------//
 
+            // initialise les trackbars (trackBar2 = min, trackBar1 = max)
+            var validYears = years.Where(y => !double.IsNaN(y)).Select(y => (int)Math.Floor(y)).ToArray();
+            int minYear = validYears.DefaultIfEmpty(DateTime.Now.Year).Min();
+            int maxYear = validYears.DefaultIfEmpty(DateTime.Now.Year).Max();
+            int tick = Math.Max(1, (maxYear - minYear) / 10);
+
+            // configure trackBar gauche (min)
+            trackBar2.Minimum = minYear;
+            trackBar2.Maximum = maxYear;
+            trackBar2.Value = minYear;
+            trackBar2.TickFrequency = tick;
+            trackBar2.SmallChange = 1;
+            trackBar2.LargeChange = 1;
+            trackBar2.ValueChanged += RangeTrackBar_ValueChanged;
+
+            // configure trackBar droite (max)
+            trackBar1.Minimum = minYear;
+            trackBar1.Maximum = maxYear;
+            trackBar1.Value = maxYear;
+            trackBar1.TickFrequency = tick;
+            trackBar1.SmallChange = 1;
+            trackBar1.LargeChange = 1;
+            trackBar1.ValueChanged += RangeTrackBar_ValueChanged;
+
+            // label d'affichage de la plage (positionné au-dessus des trackbars)
+            lblRange = new System.Windows.Forms.Label
+            {
+                AutoSize = true,
+                Location = new Point(603, trackBar2.Location.Y),
+                Text = $"{trackBar2.Value} — {trackBar1.Value}"
+            };
+            this.Controls.Add(lblRange);
+            lblRange.BringToFront();
+
             // initial plot en km/h
+            UpdateSpeedPlot();
+        }
+
+        private void RangeTrackBar_ValueChanged(object? sender, EventArgs e)
+        {
+            // empêche inversion : si start > end, on force l'autre valeur
+            if (trackBar2.Value > trackBar1.Value)
+            {
+                if (sender == trackBar2)
+                    trackBar1.Value = trackBar2.Value;
+                else
+                    trackBar2.Value = trackBar1.Value;
+            }
+
+            // met à jour le label et le plot
+            if (lblRange != null)
+                lblRange.Text = $"{trackBar2.Value} — {trackBar1.Value}";
+
             UpdateSpeedPlot();
         }
 
@@ -109,12 +166,31 @@ namespace PTL
 
             // s'assure longueurs compatibles
             int n = Math.Min(years.Length, speeds.Length);
-            var yearsTrim = years.Take(n).ToArray();
-            var speedsTrim = speeds.Take(n).ToArray();
+            var xs = new List<double>(n);
+            var ys = new List<double>(n);
+
+            // bornes depuis les trackbars (trackBar2 = min, trackBar1 = max)
+            int startYear = trackBar2?.Value ?? int.MinValue;
+            int endYear = trackBar1?.Value ?? int.MaxValue;
+            if (startYear > endYear) (startYear, endYear) = (endYear, startYear);
+
+            for (int i = 0; i < n; i++)
+            {
+                double yearVal = years[i];
+                double speedVal = speeds[i];
+                if (double.IsNaN(yearVal) || double.IsNaN(speedVal)) continue;
+
+                int yearInt = (int)Math.Floor(yearVal);
+                if (yearInt < startYear || yearInt > endYear) continue;
+
+                xs.Add(yearVal);
+                ys.Add(speedVal);
+            }
 
             // remplace le contenu du plot et rafraîchit
             formsPlot1.Plot.Clear();
-            formsPlot1.Plot.Add.Scatter(yearsTrim, speedsTrim);
+            if (xs.Count > 0)
+                formsPlot1.Plot.Add.Scatter(xs.ToArray(), ys.ToArray());
             formsPlot1.Plot.Axes.Title.Label.Text = "Vitesse moyenne des vainqueurs au Mans";
             formsPlot1.Plot.Axes.Bottom.Label.Text = "Année";
             formsPlot1.Plot.Axes.Left.Label.Text = showingKmh ? "Vitesse moyenne (km/h)" : "Vitesse moyenne (mph)";
