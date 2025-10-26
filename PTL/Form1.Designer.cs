@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             formsPlot1 = new ScottPlot.WinForms.FormsPlot();
-            buttonToggleUnit = new Button();
             trackBar1 = new TrackBar();
             trackBar2 = new TrackBar();
+            comboBox1 = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBar2).BeginInit();
             SuspendLayout();
@@ -43,17 +43,6 @@
             formsPlot1.Name = "formsPlot1";
             formsPlot1.Size = new Size(922, 476);
             formsPlot1.TabIndex = 0;
-            formsPlot1.Load += formsPlot1_Load;
-            // 
-            // buttonToggleUnit
-            // 
-            buttonToggleUnit.Location = new Point(12, 12);
-            buttonToggleUnit.Name = "buttonToggleUnit";
-            buttonToggleUnit.Size = new Size(150, 23);
-            buttonToggleUnit.TabIndex = 1;
-            buttonToggleUnit.Text = "Afficher en mph";
-            buttonToggleUnit.UseVisualStyleBackColor = true;
-            buttonToggleUnit.Click += ToggleSpeedButton_Click;
             // 
             // trackBar1
             // 
@@ -69,14 +58,22 @@
             trackBar2.Size = new Size(337, 45);
             trackBar2.TabIndex = 3;
             // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new Point(12, 12);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(217, 23);
+            comboBox1.TabIndex = 4;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1265, 732);
+            Controls.Add(comboBox1);
             Controls.Add(trackBar2);
             Controls.Add(trackBar1);
-            Controls.Add(buttonToggleUnit);
             Controls.Add(formsPlot1);
             Name = "Form1";
             Text = "Form1";
@@ -90,8 +87,8 @@
         #endregion
 
         private ScottPlot.WinForms.FormsPlot formsPlot1;
-        private System.Windows.Forms.Button buttonToggleUnit;
         private TrackBar trackBar1;
         private TrackBar trackBar2;
+        private ComboBox comboBox1;
     }
 }
