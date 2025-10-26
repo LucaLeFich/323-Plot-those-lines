@@ -355,5 +355,86 @@ namespace PTL
             }
             return list.ToArray();
         }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Title = "Exporter le graphique";
+                sfd.Filter = "Image PNG (*.png)|*.png";
+                sfd.FileName = "graphique_LeMans";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        formsPlot1.Plot.SavePng(sfd.FileName, 1920, 1080);
+                        MessageBox.Show("Graphique exporté avec succès en PNG !", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Erreur lors de l'export : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void btnImport_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Importer un fichier CSV";
+                ofd.Filter = "Fichiers CSV (*.csv)|*.csv";
+                ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        // Charger le nouveau CSV
+                        csvData = LoadCsvToDataTable(ofd.FileName);
+
+                        // Reconvertir les données
+                        var culture = CultureInfo.InvariantCulture;
+                        years = ToDoubleArray(csvData, "Year", culture);
+                        laps = ToDoubleArray(csvData, "Laps", culture);
+                        kms = ToDoubleArray(csvData, "Km", culture);
+                        miles = ToDoubleArray(csvData, "Mi", culture);
+                        avgSpeedsKmh = ToDoubleArray(csvData, "Average_speed_kmh", culture);
+                        avgSpeedsMph = ToDoubleArray(csvData, "Average_speed_mph", culture);
+
+                        teams = csvData.AsEnumerable()
+                            .Select(r => r["Team"]?.ToString() ?? string.Empty)
+                            .ToArray();
+
+                        // Mettre à jour les trackbars avec les nouvelles années
+                        var validYears = years.Where(y => !double.IsNaN(y)).Select(y => (int)Math.Floor(y)).ToArray();
+                        int minYear = validYears.DefaultIfEmpty(DateTime.Now.Year).Min();
+                        int maxYear = validYears.DefaultIfEmpty(DateTime.Now.Year).Max();
+
+                        trackBar2.Minimum = minYear;
+                        trackBar2.Maximum = maxYear;
+                        trackBar2.Value = minYear;
+
+                        trackBar1.Minimum = minYear;
+                        trackBar1.Maximum = maxYear;
+                        trackBar1.Value = maxYear;
+
+                        lblRange.Text = $"{trackBar2.Value} — {trackBar1.Value}";
+
+                        // Actualiser le graphique
+                        UpdatePlot();
+
+                        MessageBox.Show($"Fichier CSV importé avec succès :\n{Path.GetFileName(ofd.FileName)}",
+                            "Import réussi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Erreur lors de l'import du fichier : {ex.Message}",
+                            "Erreur d'import", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
     }
 }

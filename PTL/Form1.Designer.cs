@@ -32,6 +32,8 @@
             trackBar1 = new TrackBar();
             trackBar2 = new TrackBar();
             comboBox1 = new ComboBox();
+            btnExport = new Button();
+            btnImport = new Button();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBar2).BeginInit();
             SuspendLayout();
@@ -66,11 +68,34 @@
             comboBox1.Size = new Size(217, 23);
             comboBox1.TabIndex = 4;
             // 
+            // btnExport
+            // 
+            btnExport.Location = new Point(1119, 12);
+            btnExport.Name = "btnExport";
+            btnExport.Size = new Size(134, 23);
+            btnExport.TabIndex = 5;
+            btnExport.Text = "Exporter le graphique";
+            btnExport.UseVisualStyleBackColor = true;
+            btnExport.Click += btnExport_Click;
+            // 
+            // btnImport
+            // 
+            btnImport.Location = new Point(1119, 41);
+            btnImport.Name = "btnImport";
+            btnImport.Size = new Size(134, 23);
+            btnImport.TabIndex = 6;
+            btnImport.Text = "Importer des données";
+            btnImport.TextAlign = ContentAlignment.MiddleLeft;
+            btnImport.UseVisualStyleBackColor = true;
+            btnImport.Click += btnImport_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1265, 732);
+            Controls.Add(btnImport);
+            Controls.Add(btnExport);
             Controls.Add(comboBox1);
             Controls.Add(trackBar2);
             Controls.Add(trackBar1);
@@ -90,5 +115,7 @@
         private TrackBar trackBar1;
         private TrackBar trackBar2;
         private ComboBox comboBox1;
+        private Button btnExport;
+        private Button btnImport;
     }
 }
