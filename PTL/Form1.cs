@@ -12,6 +12,7 @@ using ScottPlot.Statistics;
 using ScottPlot.TickGenerators;
 using ScottPlot.TickGenerators.TimeUnits;
 using ScottPlot.WinForms;
+using ScottPlot.Plottables;
 
 namespace PTL
 {
@@ -40,12 +41,13 @@ namespace PTL
         private void Form1_Load(object sender, EventArgs e)
         {
             //--------------------------------------- !! A CHANGER SELON LA MACHINE !! ---------------------------------------\\
-            string csvPath = @"H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\data_LeMans_race_winners.csv";
+            string csvPath = @"D:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\data_LeMans_race_winners.csv";
             csvData = LoadCsvToDataTable(csvPath);
 
             string columns = string.Join(", ", csvData.Columns.Cast<DataColumn>().Select(c => c.ColumnName));
             MessageBox.Show("Colonnes disponibles : " + columns);
 
+            // Sans ça le programme confond "," et "."
             var culture = CultureInfo.InvariantCulture;
 
             //------------------------------------------ Données CSV -------------------------------------------//
@@ -112,6 +114,7 @@ namespace PTL
             trackBar1.LargeChange = 1;
             trackBar1.ValueChanged += RangeTrackBar_ValueChanged;
 
+            // Plage d'années (Affichage)
             lblRange = new System.Windows.Forms.Label
             {
                 AutoSize = true,
@@ -127,7 +130,8 @@ namespace PTL
                 "Vitesse moyenne (km/h)",
                 "Vitesse moyenne (mph)",
                 "Tours (laps)",
-                "Distance parcourue (km)"
+                "Distance parcourue (km)",
+                "Nombre de victoires par équipes"
             });
             comboBox1.SelectedIndex = 0;
             comboBox1.SelectedIndexChanged += ComboBoxGraph_SelectedIndexChanged;
@@ -176,6 +180,9 @@ namespace PTL
                     break;
                 case 3:
                     PlotDistanceKm();
+                    break;
+                case 4:
+                    PlotTeamWins();
                     break;
                 default:
                     PlotSpeed();
@@ -285,6 +292,44 @@ namespace PTL
             formsPlot1.Plot.Axes.Left.Label.Text = "Distance (km)";
             formsPlot1.Refresh();
         }
+
+        private void PlotTeamWins()
+        {
+            if (teams == null || teams.Length == 0)
+                return;
+
+            // Compter combien de fois chaque équipe apparaît dans le CSV
+            var teamCounts = teams
+                .Where(t => !string.IsNullOrWhiteSpace(t))
+                .GroupBy(t => t)
+                .Select(g => new { Team = g.Key, Wins = g.Count() })
+                .OrderByDescending(x => x.Wins)
+                .ToList();
+
+            // 15 meilleures équipes
+            int limit = Math.Min(15, teamCounts.Count);
+            string[] teamNames = teamCounts.Take(limit).Select(x => x.Team).ToArray();
+            double[] winCounts = teamCounts.Take(limit).Select(x => (double)x.Wins).ToArray();
+
+            formsPlot1.Plot.Clear();
+
+            var bar = formsPlot1.Plot.Add.Bars(winCounts);
+            bar.Horizontal = true;
+
+            // Créer les labels sur l'axe Y (noms d’équipes)
+            var positions = Enumerable.Range(0, teamNames.Length).Select(i => (double)i).ToArray();
+            formsPlot1.Plot.Axes.Left.TickGenerator = new ScottPlot.TickGenerators.NumericManual(positions, teamNames);
+
+            formsPlot1.Plot.Axes.Margins(left: 0.4);
+
+            // titres
+            formsPlot1.Plot.Axes.Title.Label.Text = "Nombre de victoires par équipe (Top 15)";
+            formsPlot1.Plot.Axes.Left.Label.Text = "Équipe";
+            formsPlot1.Plot.Axes.Bottom.Label.Text = "Nombre de victoires";
+
+            formsPlot1.Refresh();
+        }
+
 
         private DataTable LoadCsvToDataTable(string csvPath)
         {
