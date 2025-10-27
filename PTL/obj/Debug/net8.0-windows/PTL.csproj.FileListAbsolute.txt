@@ -73,7 +73,6 @@ H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8
 H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\win-x64\native\libSkiaSharp.dll
 H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\bin\Debug\net8.0-windows\runtimes\win-x86\native\libSkiaSharp.dll
 H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.csproj.AssemblyReference.cache
-H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.Form1.resources
 H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.csproj.GenerateResource.cache
 H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.GeneratedMSBuildEditorConfig.editorconfig
 H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.AssemblyInfoInputs.cache
@@ -86,3 +85,4 @@ H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8
 H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.pdb
 H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.genruntimeconfig.cache
 H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\ref\PTL.dll
+H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\obj\Debug\net8.0-windows\PTL.Form1.resources
