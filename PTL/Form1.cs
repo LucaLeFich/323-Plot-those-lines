@@ -30,7 +30,6 @@ namespace PTL
         private string[] teams = Array.Empty<string>();
         private bool showingKmh = true;
 
-        // label d'affichage de la plage
         private System.Windows.Forms.Label lblRange = null!;
 
         public Form1()
@@ -182,7 +181,6 @@ namespace PTL
             int endYear = trackBar1?.Value ?? int.MaxValue;
             if (startYear > endYear) (startYear, endYear) = (endYear, startYear);
 
-            // Construire des tableaux synchronisés : mêmes X (years) et Y (NaN quand absent)
             var points = Enumerable.Range(0, n)
                 .Select(i => new
                 {
@@ -203,7 +201,6 @@ namespace PTL
 
             if (showBoth)
             {
-                // Utiliser le même X pour les deux séries (conserver NaN pour créer des cassures si besoin)
                 if (xs.Length > 0)
                 {
                     var kmSeries = formsPlot1.Plot.Add.Scatter(xs, ysKmh);
@@ -214,7 +211,7 @@ namespace PTL
 
                     var mphSeries = formsPlot1.Plot.Add.Scatter(xs, ysMph);
                     mphSeries.Label = "mph";
-                    mphSeries.Color = ScottPlot.Color.FromARGB(System.Drawing.Color.FromArgb(255, 69, 0).ToArgb()); // orangered
+                    mphSeries.Color = ScottPlot.Color.FromARGB(System.Drawing.Color.FromArgb(255, 69, 0).ToArgb());
                     mphSeries.LineWidth = showingKmh ? 1 : 3;
                     mphSeries.MarkerSize = 0;
                 }
@@ -377,6 +374,7 @@ namespace PTL
             return dt;
         }
 
+        // Boutons ---------------------------------------------------------
         private void btnExport_Click(object sender, EventArgs e)
         {
             using (SaveFileDialog sfd = new SaveFileDialog())
@@ -422,10 +420,6 @@ namespace PTL
                         avgSpeedsKmh = csvData.ToDoubleArray("Average_speed_kmh", culture);
                         avgSpeedsMph = csvData.ToDoubleArray("Average_speed_mph", culture);
 
-                        //teams = csvData.AsEnumerable()
-                        //    .Select(r => r["Team"]?.ToString() ?? string.Empty) /////////////////////////////////////////////////////////////////////
-                        //    .ToArray();
-
                         var validYears = years.Where(y => !double.IsNaN(y)).Select(y => (int)Math.Floor(y)).ToArray();
                         int minYear = validYears.DefaultIfEmpty(DateTime.Now.Year).Min();
                         int maxYear = validYears.DefaultIfEmpty(DateTime.Now.Year).Max();
@@ -454,7 +448,6 @@ namespace PTL
             }
         }
 
-        // Handlers des boutons statistiques : min / max / moyenne
         private void BtnMin_Click(object sender, EventArgs e)
         {
             var vals = GetCurrentPlotValues();
@@ -502,6 +495,7 @@ namespace PTL
             string unit = GetValueUnitLabel(selected);
             MessageBox.Show($"Moyenne : {formatted}{unit}", "Moyenne", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        // Fin des boutons -------------------------------------------------
 
         // Récupère les valeurs Y affichées
         private double[] GetCurrentPlotValues()
@@ -559,10 +553,10 @@ namespace PTL
             return values;
         }
 
-        // Formatage pour affichage (utilise la culture courante pour l'UI)
+        // Formate la valeur afin d'être sûr qu'il n'y ait pas de decimales
         private string FormatValue(double v, int selected)
         {
-            if (selected == 4) // victoires -> entier
+            if (selected == 4)
                 return ((int)Math.Round(v)).ToString(CultureInfo.CurrentCulture);
             return v.ToString("F2", CultureInfo.CurrentCulture);
         }
@@ -583,25 +577,6 @@ namespace PTL
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             UpdatePlot();
-
-            // Diagnostic : affiche les étendues X/Y des ScatterPlot présents
-            var scatters = formsPlot1.Plot.GetPlottables<ScottPlot.Plottables.Scatter>().ToArray();
-            var info = new List<string> { $"Scatter count: {scatters.Length}" };
-            for (int i = 0; i < scatters.Length; i++)
-            {
-                var s = scatters[i];
-                // Correction : récupérer les points via IScatterSource.GetScatterPoints()
-                var data = s.Data;
-                var points = data != null ? data.GetScatterPoints() : new List<ScottPlot.Coordinates>();
-                double[] xs = points.Select(pt => pt.X).ToArray();
-                double[] ys = points.Select(pt => pt.Y).ToArray();
-                double minX = xs.Length > 0 ? xs.Min() : double.NaN;
-                double maxX = xs.Length > 0 ? xs.Max() : double.NaN;
-                double minY = ys.Length > 0 ? ys.Where(v => !double.IsNaN(v)).DefaultIfEmpty(double.NaN).Min() : double.NaN;
-                double maxY = ys.Length > 0 ? ys.Where(v => !double.IsNaN(v)).DefaultIfEmpty(double.NaN).Max() : double.NaN;
-                info.Add($"{i}: '{s.Label}' points={xs.Length} X[{minX:F0},{maxX:F0}] Y[{minY:F2},{maxY:F2}]");
-            }
-            MessageBox.Show(string.Join(Environment.NewLine, info), "Debug Scatter extents", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 
