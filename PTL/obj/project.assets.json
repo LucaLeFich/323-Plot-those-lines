@@ -868,25 +868,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\pq48wkn\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\lucap\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
+      "projectUniqueName": "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
       "projectName": "PTL",
-      "projectPath": "D:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
-      "packagesPath": "C:\\Users\\pq48wkn\\.nuget\\packages\\",
-      "outputPath": "D:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\obj\\",
+      "projectPath": "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
+      "packagesPath": "C:\\Users\\lucap\\.nuget\\packages\\",
+      "outputPath": "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\pq48wkn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\lucap\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -943,7 +941,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
       }
     }
   },

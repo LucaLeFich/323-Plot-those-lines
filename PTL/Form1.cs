@@ -41,7 +41,7 @@ namespace PTL
         private void Form1_Load(object sender, EventArgs e)
         {
             //--------------------------------------- !! A CHANGER SELON LA MACHINE !! ---------------------------------------\\
-            string csvPath = @"D:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\data_LeMans_race_winners.csv";
+            string csvPath = @"H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\data_LeMans_race_winners.csv";
             csvData = LoadCsvToDataTable(csvPath);
 
             string columns = string.Join(", ", csvData.Columns.Cast<DataColumn>().Select(c => c.ColumnName));
@@ -60,37 +60,15 @@ namespace PTL
             avgSpeedsMph = csvData.ToDoubleArray("Average_speed_mph", culture);
             var avgLapTimes = csvData.ToDoubleArray("Average_lap_time", culture);
 
-            teams = csvData.AsEnumerable()
-                .Select(r => r["Team"]?.ToString() ?? string.Empty)
-                .ToArray();
-
-            string?[] drivers = csvData.AsEnumerable()
-                .Select(r => r["Drivers"]?.ToString() ?? string.Empty)
-                .ToArray();
-
-            string?[] classes = csvData.AsEnumerable()
-                .Select(r => r["Class"]?.ToString() ?? string.Empty)
-                .ToArray();
-
-            string?[] car = csvData.AsEnumerable()
-                .Select(r => r["Car"]?.ToString() ?? string.Empty)
-                .ToArray();
-
-            string?[] tyre = csvData.AsEnumerable()
-               .Select(r => r["Tyre"]?.ToString() ?? string.Empty)
-               .ToArray();
-
-            string?[] series = csvData.AsEnumerable()
-               .Select(r => r["Series"]?.ToString() ?? string.Empty)
-               .ToArray();
-
-            string?[] driver_nationality = csvData.AsEnumerable()
-               .Select(r => r["Driver_nationality"]?.ToString() ?? string.Empty)
-               .ToArray();
-
-            string?[] team_nationality = csvData.AsEnumerable()
-               .Select(r => r["Team_nationality"]?.ToString() ?? string.Empty)
-               .ToArray();
+            // On utilise l'extension de langage ToStringArray() définie plus bas
+            teams = csvData.ToStringArray("Team");
+            string[] drivers = csvData.ToStringArray("Drivers");
+            string[] classes = csvData.ToStringArray("Class");
+            string[] car = csvData.ToStringArray("Car");
+            string[] tyre = csvData.ToStringArray("Tyre");
+            string[] series = csvData.ToStringArray("Series");
+            string[] driver_nationality = csvData.ToStringArray("Driver_nationality");
+            string[] team_nationality = csvData.ToStringArray("Team_nationality");
             //---------------------------------------------------------------------------------------------------//
 
             var validYears = years.Where(y => !double.IsNaN(y)).Select(y => (int)Math.Floor(y)).ToArray();
@@ -193,35 +171,78 @@ namespace PTL
         private void PlotSpeed()
         {
             if ((avgSpeedsKmh == null && avgSpeedsMph == null) || years == null) return;
-            var speeds = showingKmh ? avgSpeedsKmh : avgSpeedsMph;
 
-            int n = Math.Min(years.Length, speeds.Length);
-            var xs = new List<double>(n);
-            var ys = new List<double>(n);
+            bool showBoth = checkBox1 != null && checkBox1.Checked;
 
+            var kmh = avgSpeedsKmh ?? Array.Empty<double>();
+            var mph = avgSpeedsMph ?? Array.Empty<double>();
+
+            int n = Math.Min(years.Length, Math.Max(kmh.Length, mph.Length));
             int startYear = trackBar2?.Value ?? int.MinValue;
             int endYear = trackBar1?.Value ?? int.MaxValue;
             if (startYear > endYear) (startYear, endYear) = (endYear, startYear);
 
-            for (int i = 0; i < n; i++)
-            {
-                double yearVal = years[i];
-                double speedVal = speeds[i];
-                if (double.IsNaN(yearVal) || double.IsNaN(speedVal)) continue;
+            // Construire des tableaux synchronisés : mêmes X (years) et Y (NaN quand absent)
+            var points = Enumerable.Range(0, n)
+                .Select(i => new
+                {
+                    Year = i < years.Length ? years[i] : double.NaN,
+                    Kmh = i < kmh.Length ? kmh[i] : double.NaN,
+                    Mph = i < mph.Length ? mph[i] : double.NaN
+                })
+                .Where(p => !double.IsNaN(p.Year))
+                .Select(p => new { YearInt = (int)Math.Floor(p.Year), p.Year, p.Kmh, p.Mph })
+                .Where(p => p.YearInt >= startYear && p.YearInt <= endYear)
+                .ToArray();
 
-                int yearInt = (int)Math.Floor(yearVal);
-                if (yearInt < startYear || yearInt > endYear) continue;
-
-                xs.Add(yearVal);
-                ys.Add(speedVal);
-            }
+            var xs = points.Select(p => p.Year).ToArray();
+            var ysKmh = points.Select(p => p.Kmh).ToArray();
+            var ysMph = points.Select(p => p.Mph).ToArray();
 
             formsPlot1.Plot.Clear();
-            if (xs.Count > 0)
-                formsPlot1.Plot.Add.Scatter(xs.ToArray(), ys.ToArray());
+
+            if (showBoth)
+            {
+                // Utiliser le même X pour les deux séries (conserver NaN pour créer des cassures si besoin)
+                if (xs.Length > 0)
+                {
+                    var kmSeries = formsPlot1.Plot.Add.Scatter(xs, ysKmh);
+                    kmSeries.Label = "km/h";
+                    kmSeries.Color = ScottPlot.Color.FromARGB(System.Drawing.Color.FromArgb(0, 0, 255).ToArgb());
+                    kmSeries.LineWidth = showingKmh ? 3 : 1;
+                    kmSeries.MarkerSize = 0;
+
+                    var mphSeries = formsPlot1.Plot.Add.Scatter(xs, ysMph);
+                    mphSeries.Label = "mph";
+                    mphSeries.Color = ScottPlot.Color.FromARGB(System.Drawing.Color.FromArgb(255, 69, 0).ToArgb()); // orangered
+                    mphSeries.LineWidth = showingKmh ? 1 : 3;
+                    mphSeries.MarkerSize = 0;
+                }
+
+                formsPlot1.Plot.ShowLegend();
+                formsPlot1.Plot.Axes.AutoScale();
+                formsPlot1.Plot.Axes.Left.Label.Text = "Vitesse (km/h et mph)";
+            }
+            else
+            {
+                var speeds = showingKmh ? ysKmh : ysMph;
+                var validIdx = Enumerable.Range(0, xs.Length).Where(i => !double.IsNaN(speeds[i])).ToArray();
+                var validXs = validIdx.Select(i => xs[i]).ToArray();
+                var validYs = validIdx.Select(i => speeds[i]).ToArray();
+
+                if (validXs.Length > 0)
+                {
+                    var s = formsPlot1.Plot.Add.Scatter(validXs, validYs);
+                    s.LineWidth = 2;
+                    s.MarkerSize = 0;
+                }
+
+                formsPlot1.Plot.Axes.Left.Label.Text = showingKmh ? "Vitesse moyenne (km/h)" : "Vitesse moyenne (mph)";
+                formsPlot1.Plot.Axes.AutoScale();
+            }
+
             formsPlot1.Plot.Axes.Title.Label.Text = "Vitesse moyenne des vainqueurs au Mans";
             formsPlot1.Plot.Axes.Bottom.Label.Text = "Année";
-            formsPlot1.Plot.Axes.Left.Label.Text = showingKmh ? "Vitesse moyenne (km/h)" : "Vitesse moyenne (mph)";
             formsPlot1.Refresh();
         }
 
@@ -230,29 +251,23 @@ namespace PTL
             if (laps == null || years == null) return;
 
             int n = Math.Min(years.Length, laps.Length);
-            var xs = new List<double>(n);
-            var ys = new List<double>(n);
-
             int startYear = trackBar2?.Value ?? int.MinValue;
             int endYear = trackBar1?.Value ?? int.MaxValue;
             if (startYear > endYear) (startYear, endYear) = (endYear, startYear);
 
-            for (int i = 0; i < n; i++)
-            {
-                double yearVal = years[i];
-                double lapVal = laps[i];
-                if (double.IsNaN(yearVal) || double.IsNaN(lapVal)) continue;
+            var points = Enumerable.Range(0, n)
+                .Select(i => new { Year = years[i], Value = laps[i] })
+                .Where(p => !double.IsNaN(p.Year) && !double.IsNaN(p.Value))
+                .Select(p => new { YearInt = (int)Math.Floor(p.Year), p.Year, p.Value })
+                .Where(p => p.YearInt >= startYear && p.YearInt <= endYear)
+                .ToArray();
 
-                int yearInt = (int)Math.Floor(yearVal);
-                if (yearInt < startYear || yearInt > endYear) continue;
-
-                xs.Add(yearVal);
-                ys.Add(lapVal);
-            }
+            var xs = points.Select(p => p.Year).ToArray();
+            var ys = points.Select(p => p.Value).ToArray();
 
             formsPlot1.Plot.Clear();
-            if (xs.Count > 0)
-                formsPlot1.Plot.Add.Bars(xs.ToArray(), ys.ToArray());
+            if (xs.Length > 0)
+                formsPlot1.Plot.Add.Bars(xs, ys);
             formsPlot1.Plot.Axes.Title.Label.Text = "Tours (laps) par année";
             formsPlot1.Plot.Axes.Bottom.Label.Text = "Année";
             formsPlot1.Plot.Axes.Left.Label.Text = "Nombre de tours";
@@ -264,29 +279,23 @@ namespace PTL
             if (kms == null || years == null) return;
 
             int n = Math.Min(years.Length, kms.Length);
-            var xs = new List<double>(n);
-            var ys = new List<double>(n);
-
             int startYear = trackBar2?.Value ?? int.MinValue;
             int endYear = trackBar1?.Value ?? int.MaxValue;
             if (startYear > endYear) (startYear, endYear) = (endYear, startYear);
 
-            for (int i = 0; i < n; i++)
-            {
-                double yearVal = years[i];
-                double kmVal = kms[i];
-                if (double.IsNaN(yearVal) || double.IsNaN(kmVal)) continue;
+            var points = Enumerable.Range(0, n)
+                .Select(i => new { Year = years[i], Value = kms[i] })
+                .Where(p => !double.IsNaN(p.Year) && !double.IsNaN(p.Value))
+                .Select(p => new { YearInt = (int)Math.Floor(p.Year), p.Year, p.Value })
+                .Where(p => p.YearInt >= startYear && p.YearInt <= endYear)
+                .ToArray();
 
-                int yearInt = (int)Math.Floor(yearVal);
-                if (yearInt < startYear || yearInt > endYear) continue;
-
-                xs.Add(yearVal);
-                ys.Add(kmVal);
-            }
+            var xs = points.Select(p => p.Year).ToArray();
+            var ys = points.Select(p => p.Value).ToArray();
 
             formsPlot1.Plot.Clear();
-            if (xs.Count > 0)
-                formsPlot1.Plot.Add.Bars(xs.ToArray(), ys.ToArray());
+            if (xs.Length > 0)
+                formsPlot1.Plot.Add.Bars(xs, ys);
             formsPlot1.Plot.Axes.Title.Label.Text = "Distance parcourue par année";
             formsPlot1.Plot.Axes.Bottom.Label.Text = "Année";
             formsPlot1.Plot.Axes.Left.Label.Text = "Distance (km)";
@@ -353,9 +362,9 @@ namespace PTL
                     string[] fields = parser.ReadFields();
                     if (fields.Length != dt.Columns.Count)
                     {
-                        var adjusted = new string[dt.Columns.Count];
-                        for (int i = 0; i < dt.Columns.Count; i++)
-                            adjusted[i] = i < fields.Length ? fields[i] : string.Empty;
+                        var adjusted = Enumerable.Range(0, dt.Columns.Count)
+                            .Select(i => i < fields.Length ? fields[i] : string.Empty)
+                            .ToArray();
                         dt.Rows.Add(adjusted);
                     }
                     else
@@ -413,9 +422,9 @@ namespace PTL
                         avgSpeedsKmh = csvData.ToDoubleArray("Average_speed_kmh", culture);
                         avgSpeedsMph = csvData.ToDoubleArray("Average_speed_mph", culture);
 
-                        teams = csvData.AsEnumerable()
-                            .Select(r => r["Team"]?.ToString() ?? string.Empty)
-                            .ToArray();
+                        //teams = csvData.AsEnumerable()
+                        //    .Select(r => r["Team"]?.ToString() ?? string.Empty) /////////////////////////////////////////////////////////////////////
+                        //    .ToArray();
 
                         var validYears = years.Where(y => !double.IsNaN(y)).Select(y => (int)Math.Floor(y)).ToArray();
                         int minYear = validYears.DefaultIfEmpty(DateTime.Now.Year).Min();
@@ -444,24 +453,179 @@ namespace PTL
                 }
             }
         }
+
+        // Handlers des boutons statistiques : min / max / moyenne
+        private void BtnMin_Click(object sender, EventArgs e)
+        {
+            var vals = GetCurrentPlotValues();
+            if (vals == null || vals.Length == 0)
+            {
+                MessageBox.Show("Aucune donnée visible pour le graphique actuel.", "Statistiques", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            int selected = comboBox1?.SelectedIndex ?? 0;
+            double min = vals.Min();
+            string formatted = FormatValue(min, selected);
+            string unit = GetValueUnitLabel(selected);
+            MessageBox.Show($"Valeur minimale : {formatted}{unit}", "Valeur minimale", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void BtnMax_Click(object sender, EventArgs e)
+        {
+            var vals = GetCurrentPlotValues();
+            if (vals == null || vals.Length == 0)
+            {
+                MessageBox.Show("Aucune donnée visible pour le graphique actuel.", "Statistiques", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            int selected = comboBox1?.SelectedIndex ?? 0;
+            double max = vals.Max();
+            string formatted = FormatValue(max, selected);
+            string unit = GetValueUnitLabel(selected);
+            MessageBox.Show($"Valeur maximale : {formatted}{unit}", "Valeur minimale", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void BtnAvg_Click(object sender, EventArgs e)
+        {
+            var vals = GetCurrentPlotValues();
+            if (vals == null || vals.Length == 0)
+            {
+                MessageBox.Show("Aucune donnée visible pour le graphique actuel.", "Statistiques", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            int selected = comboBox1?.SelectedIndex ?? 0;
+            double avg = vals.Average();
+            string formatted = FormatValue(avg, selected);
+            string unit = GetValueUnitLabel(selected);
+            MessageBox.Show($"Moyenne : {formatted}{unit}", "Moyenne", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        // Récupère les valeurs Y affichées
+        private double[] GetCurrentPlotValues()
+        {
+            int selected = comboBox1?.SelectedIndex ?? 0;
+
+            if (selected == 4)
+            {
+                if (teams == null || teams.Length == 0) return Array.Empty<double>();
+
+                var teamCounts = teams
+                    .Where(t => !string.IsNullOrWhiteSpace(t))
+                    .GroupBy(t => t)
+                    .Select(g => new { Team = g.Key, Wins = g.Count() })
+                    .OrderByDescending(x => x.Wins)
+                    .ToList();
+
+                int limit = Math.Min(15, teamCounts.Count);
+                return teamCounts.Take(limit).Select(x => (double)x.Wins).ToArray();
+            }
+
+            double[] source;
+            switch (selected)
+            {
+                case 0:
+                case 1:
+                    source = showingKmh ? avgSpeedsKmh : avgSpeedsMph;
+                    break;
+                case 2:
+                    source = laps;
+                    break;
+                case 3:
+                    source = kms;
+                    break;
+                default:
+                    source = avgSpeedsKmh;
+                    break;
+            }
+
+            if (years == null || source == null) return Array.Empty<double>();
+
+            int n = Math.Min(years.Length, source.Length);
+            int startYear = trackBar2?.Value ?? int.MinValue;
+            int endYear = trackBar1?.Value ?? int.MaxValue;
+            if (startYear > endYear) (startYear, endYear) = (endYear, startYear);
+
+            var values = Enumerable.Range(0, n)
+                .Select(i => new { Y = years[i], V = source[i] })
+                .Where(p => !double.IsNaN(p.Y) && !double.IsNaN(p.V))
+                .Select(p => new { YearInt = (int)Math.Floor(p.Y), p.V })
+                .Where(p => p.YearInt >= startYear && p.YearInt <= endYear)
+                .Select(p => p.V)
+                .ToArray();
+
+            return values;
+        }
+
+        // Formatage pour affichage (utilise la culture courante pour l'UI)
+        private string FormatValue(double v, int selected)
+        {
+            if (selected == 4) // victoires -> entier
+                return ((int)Math.Round(v)).ToString(CultureInfo.CurrentCulture);
+            return v.ToString("F2", CultureInfo.CurrentCulture);
+        }
+
+        private string GetValueUnitLabel(int selected)
+        {
+            return selected switch
+            {
+                0 => " km/h",
+                1 => " mph",
+                2 => " tours",
+                3 => " km",
+                4 => " victoires",
+                _ => string.Empty
+            };
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdatePlot();
+
+            // Diagnostic : affiche les étendues X/Y des ScatterPlot présents
+            var scatters = formsPlot1.Plot.GetPlottables<ScottPlot.Plottables.Scatter>().ToArray();
+            var info = new List<string> { $"Scatter count: {scatters.Length}" };
+            for (int i = 0; i < scatters.Length; i++)
+            {
+                var s = scatters[i];
+                // Correction : récupérer les points via IScatterSource.GetScatterPoints()
+                var data = s.Data;
+                var points = data != null ? data.GetScatterPoints() : new List<ScottPlot.Coordinates>();
+                double[] xs = points.Select(pt => pt.X).ToArray();
+                double[] ys = points.Select(pt => pt.Y).ToArray();
+                double minX = xs.Length > 0 ? xs.Min() : double.NaN;
+                double maxX = xs.Length > 0 ? xs.Max() : double.NaN;
+                double minY = ys.Length > 0 ? ys.Where(v => !double.IsNaN(v)).DefaultIfEmpty(double.NaN).Min() : double.NaN;
+                double maxY = ys.Length > 0 ? ys.Where(v => !double.IsNaN(v)).DefaultIfEmpty(double.NaN).Max() : double.NaN;
+                info.Add($"{i}: '{s.Label}' points={xs.Length} X[{minX:F0},{maxX:F0}] Y[{minY:F2},{maxY:F2}]");
+            }
+            MessageBox.Show(string.Join(Environment.NewLine, info), "Debug Scatter extents", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 
-    // Extension du langage : ajoute ToDoubleArray() à tout DataTable
+    // Première extension du langage : ajoute ToDoubleArray() qui permet de convertir une colonne DataTable en tableau de double
     public static class DataTableExtensions
     {
         public static double[] ToDoubleArray(this DataTable table, string columnName, CultureInfo culture)
         {
-            var list = new List<double>(table.Rows.Count);
-            foreach (DataRow r in table.Rows)
-            {
-                var obj = r.Table.Columns.Contains(columnName) ? r[columnName] : null;
-                var s = obj?.ToString() ?? string.Empty;
-                if (double.TryParse(s, NumberStyles.Any, culture, out var v))
-                    list.Add(v);
-                else
-                    list.Add(double.NaN);
-            }
-            return list.ToArray();
+            return table.AsEnumerable()
+                .Select(r =>
+                {
+                    var obj = r.Table.Columns.Contains(columnName) ? r[columnName] : null;
+                    var s = obj?.ToString() ?? string.Empty;
+                    return double.TryParse(s, NumberStyles.Any, culture, out var v) ? v : double.NaN;
+                })
+                .ToArray();
+        }
+
+        // Deuxième extension du langage : ajoute ToStringArray() qui permet de convertir une colonne DataTable en tableau de string
+        public static string[] ToStringArray(this DataTable table, string columnName)
+        {
+            return table.AsEnumerable()
+                .Select(r => r[columnName]?.ToString() ?? string.Empty)
+                .ToArray();
         }
     }
 }

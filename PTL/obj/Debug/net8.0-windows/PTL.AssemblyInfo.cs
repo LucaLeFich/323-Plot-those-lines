@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PTL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fca2fe3acc670c1177e194ddebeb6be21572c3fa")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5b1659921f022fc778feabc50db151271f04ee0f")]
 [assembly: System.Reflection.AssemblyProductAttribute("PTL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PTL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
