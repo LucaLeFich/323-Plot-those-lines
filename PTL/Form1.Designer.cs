@@ -38,6 +38,7 @@
             BtnMax = new Button();
             BtnAvg = new Button();
             checkBox1 = new CheckBox();
+            checkBox2 = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBar2).BeginInit();
             SuspendLayout();
@@ -134,11 +135,23 @@
             checkBox1.UseVisualStyleBackColor = true;
             checkBox1.CheckedChanged += checkBox1_CheckedChanged;
             // 
+            // checkBox2
+            // 
+            checkBox2.AutoSize = true;
+            checkBox2.Location = new Point(12, 69);
+            checkBox2.Name = "checkBox2";
+            checkBox2.Size = new Size(195, 19);
+            checkBox2.TabIndex = 11;
+            checkBox2.Text = "Afficher distance en km et miles";
+            checkBox2.UseVisualStyleBackColor = true;
+            checkBox2.CheckedChanged += checkBox2_CheckedChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1265, 732);
+            Controls.Add(checkBox2);
             Controls.Add(checkBox1);
             Controls.Add(BtnAvg);
             Controls.Add(BtnMax);
@@ -170,5 +183,6 @@
         private Button BtnMax;
         private Button BtnAvg;
         private CheckBox checkBox1;
+        private CheckBox checkBox2;
     }
 }

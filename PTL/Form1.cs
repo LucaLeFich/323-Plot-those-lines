@@ -43,9 +43,6 @@ namespace PTL
             string csvPath = @"H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\data_LeMans_race_winners.csv";
             csvData = LoadCsvToDataTable(csvPath);
 
-            string columns = string.Join(", ", csvData.Columns.Cast<DataColumn>().Select(c => c.ColumnName));
-            MessageBox.Show("Colonnes disponibles : " + columns);
-
             // Sans ça le programme confond "," et "."
             var culture = CultureInfo.InvariantCulture;
 
@@ -57,17 +54,7 @@ namespace PTL
             miles = csvData.ToDoubleArray("Mi", culture);
             avgSpeedsKmh = csvData.ToDoubleArray("Average_speed_kmh", culture);
             avgSpeedsMph = csvData.ToDoubleArray("Average_speed_mph", culture);
-            var avgLapTimes = csvData.ToDoubleArray("Average_lap_time", culture);
-
-            // On utilise l'extension de langage ToStringArray() définie plus bas
             teams = csvData.ToStringArray("Team");
-            string[] drivers = csvData.ToStringArray("Drivers");
-            string[] classes = csvData.ToStringArray("Class");
-            string[] car = csvData.ToStringArray("Car");
-            string[] tyre = csvData.ToStringArray("Tyre");
-            string[] series = csvData.ToStringArray("Series");
-            string[] driver_nationality = csvData.ToStringArray("Driver_nationality");
-            string[] team_nationality = csvData.ToStringArray("Team_nationality");
             //---------------------------------------------------------------------------------------------------//
 
             var validYears = years.Where(y => !double.IsNaN(y)).Select(y => (int)Math.Floor(y)).ToArray();
@@ -78,17 +65,11 @@ namespace PTL
             trackBar2.Minimum = minYear;
             trackBar2.Maximum = maxYear;
             trackBar2.Value = minYear;
-            trackBar2.TickFrequency = tick;
-            trackBar2.SmallChange = 1;
-            trackBar2.LargeChange = 1;
             trackBar2.ValueChanged += RangeTrackBar_ValueChanged;
 
             trackBar1.Minimum = minYear;
             trackBar1.Maximum = maxYear;
             trackBar1.Value = maxYear;
-            trackBar1.TickFrequency = tick;
-            trackBar1.SmallChange = 1;
-            trackBar1.LargeChange = 1;
             trackBar1.ValueChanged += RangeTrackBar_ValueChanged;
 
             // Plage d'années (Affichage)
@@ -139,7 +120,7 @@ namespace PTL
 
         private void UpdatePlot()
         {
-            if (years == null) return;
+            if (years.Length == 0) return;
 
             int selected = comboBox1?.SelectedIndex ?? 0;
             switch (selected)
@@ -169,16 +150,16 @@ namespace PTL
 
         private void PlotSpeed()
         {
-            if ((avgSpeedsKmh == null && avgSpeedsMph == null) || years == null) return;
+            if ((avgSpeedsKmh == null && avgSpeedsMph == null) || years.Length == 0) return;
 
             bool showBoth = checkBox1 != null && checkBox1.Checked;
 
-            var kmh = avgSpeedsKmh ?? Array.Empty<double>();
-            var mph = avgSpeedsMph ?? Array.Empty<double>();
+            var kmh = avgSpeedsKmh;
+            var mph = avgSpeedsMph;
 
             int n = Math.Min(years.Length, Math.Max(kmh.Length, mph.Length));
-            int startYear = trackBar2?.Value ?? int.MinValue;
-            int endYear = trackBar1?.Value ?? int.MaxValue;
+            int startYear = trackBar2.Value;
+            int endYear = trackBar1.Value;
             if (startYear > endYear) (startYear, endYear) = (endYear, startYear);
 
             var points = Enumerable.Range(0, n)
@@ -206,14 +187,10 @@ namespace PTL
                     var kmSeries = formsPlot1.Plot.Add.Scatter(xs, ysKmh);
                     kmSeries.Label = "km/h";
                     kmSeries.Color = ScottPlot.Color.FromARGB(System.Drawing.Color.FromArgb(0, 0, 255).ToArgb());
-                    kmSeries.LineWidth = showingKmh ? 3 : 1;
-                    kmSeries.MarkerSize = 0;
 
                     var mphSeries = formsPlot1.Plot.Add.Scatter(xs, ysMph);
                     mphSeries.Label = "mph";
                     mphSeries.Color = ScottPlot.Color.FromARGB(System.Drawing.Color.FromArgb(255, 69, 0).ToArgb());
-                    mphSeries.LineWidth = showingKmh ? 1 : 3;
-                    mphSeries.MarkerSize = 0;
                 }
 
                 formsPlot1.Plot.ShowLegend();
@@ -230,8 +207,6 @@ namespace PTL
                 if (validXs.Length > 0)
                 {
                     var s = formsPlot1.Plot.Add.Scatter(validXs, validYs);
-                    s.LineWidth = 2;
-                    s.MarkerSize = 0;
                 }
 
                 formsPlot1.Plot.Axes.Left.Label.Text = showingKmh ? "Vitesse moyenne (km/h)" : "Vitesse moyenne (mph)";
@@ -245,11 +220,11 @@ namespace PTL
 
         private void PlotLaps()
         {
-            if (laps == null || years == null) return;
+            if (laps == null || years.Length == 0) return;
 
             int n = Math.Min(years.Length, laps.Length);
-            int startYear = trackBar2?.Value ?? int.MinValue;
-            int endYear = trackBar1?.Value ?? int.MaxValue;
+            int startYear = trackBar2.Value;
+            int endYear = trackBar1.Value;
             if (startYear > endYear) (startYear, endYear) = (endYear, startYear);
 
             var points = Enumerable.Range(0, n)
@@ -263,39 +238,93 @@ namespace PTL
             var ys = points.Select(p => p.Value).ToArray();
 
             formsPlot1.Plot.Clear();
+
             if (xs.Length > 0)
-                formsPlot1.Plot.Add.Bars(xs, ys);
+            {
+                var s = formsPlot1.Plot.Add.Scatter(xs, ys);
+            }
+
             formsPlot1.Plot.Axes.Title.Label.Text = "Tours (laps) par année";
             formsPlot1.Plot.Axes.Bottom.Label.Text = "Année";
             formsPlot1.Plot.Axes.Left.Label.Text = "Nombre de tours";
+            formsPlot1.Plot.Axes.AutoScale();
             formsPlot1.Refresh();
         }
 
         private void PlotDistanceKm()
         {
-            if (kms == null || years == null) return;
+            if (kms == null || years.Length == 0) return;
 
-            int n = Math.Min(years.Length, kms.Length);
-            int startYear = trackBar2?.Value ?? int.MinValue;
-            int endYear = trackBar1?.Value ?? int.MaxValue;
+            // utiliser la longueur maximale entre kms et miles pour pouvoir tracer les deux séries
+            int nAll = Math.Min(years.Length, Math.Max(kms.Length, miles.Length));
+            int startYear = trackBar2.Value;
+            int endYear = trackBar1.Value;
             if (startYear > endYear) (startYear, endYear) = (endYear, startYear);
 
-            var points = Enumerable.Range(0, n)
-                .Select(i => new { Year = years[i], Value = kms[i] })
-                .Where(p => !double.IsNaN(p.Year) && !double.IsNaN(p.Value))
-                .Select(p => new { YearInt = (int)Math.Floor(p.Year), p.Year, p.Value })
+            // Vérifier si on veut afficher les miles + les kms
+            bool showMiles = checkBox2?.Checked == true && miles?.Any(m => !double.IsNaN(m)) == true;
+
+            formsPlot1.Plot.Clear();
+
+            // Afficher seulement les kms
+            if (!showMiles)
+            {
+                var points = Enumerable.Range(0, Math.Min(years.Length, kms.Length))
+                    .Select(i => new { Year = years[i], Value = kms[i] })
+                    .Where(p => !double.IsNaN(p.Year) && !double.IsNaN(p.Value))
+                    .Select(p => new { YearInt = (int)Math.Floor(p.Year), p.Year, p.Value })
+                    .Where(p => p.YearInt >= startYear && p.YearInt <= endYear)
+                    .ToArray();
+
+                var xs = points.Select(p => p.Year).ToArray();
+                var ys = points.Select(p => p.Value).ToArray();
+
+                if (xs.Length > 0)
+                {
+                    var s = formsPlot1.Plot.Add.Scatter(xs, ys);
+                }
+
+                formsPlot1.Plot.Axes.Title.Label.Text = "Distance parcourue par année";
+                formsPlot1.Plot.Axes.Bottom.Label.Text = "Année";
+                formsPlot1.Plot.Axes.Left.Label.Text = "Distance (km)";
+                formsPlot1.Plot.Axes.AutoScale();
+                formsPlot1.Refresh();
+                return;
+            }
+
+            // Afficher km et miles simultanément
+            var allPoints = Enumerable.Range(0, nAll)
+                .Select(i => new
+                {
+                    Year = i < years.Length ? years[i] : double.NaN,
+                    Km = i < kms.Length ? kms[i] : double.NaN,
+                    Mi = i < miles.Length ? miles[i] : double.NaN
+                })
+                .Where(p => !double.IsNaN(p.Year))
+                .Select(p => new { YearInt = (int)Math.Floor(p.Year), p.Year, p.Km, p.Mi })
                 .Where(p => p.YearInt >= startYear && p.YearInt <= endYear)
                 .ToArray();
 
-            var xs = points.Select(p => p.Year).ToArray();
-            var ys = points.Select(p => p.Value).ToArray();
+            var xsAll = allPoints.Select(p => p.Year).ToArray();
+            var ysKm = allPoints.Select(p => p.Km).ToArray();
+            var ysMi = allPoints.Select(p => p.Mi).ToArray();
 
-            formsPlot1.Plot.Clear();
-            if (xs.Length > 0)
-                formsPlot1.Plot.Add.Bars(xs, ys);
+            if (xsAll.Length > 0)
+            {
+                var sKm = formsPlot1.Plot.Add.Scatter(xsAll, ysKm);
+                sKm.Label = "km";
+                sKm.Color = ScottPlot.Color.FromARGB(System.Drawing.Color.FromArgb(34, 139, 34).ToArgb());
+
+                var sMi = formsPlot1.Plot.Add.Scatter(xsAll, ysMi);
+                sMi.Label = "miles";
+                sMi.Color = ScottPlot.Color.FromARGB(System.Drawing.Color.FromArgb(255, 140, 0).ToArgb());
+            }
+
+            formsPlot1.Plot.ShowLegend();
             formsPlot1.Plot.Axes.Title.Label.Text = "Distance parcourue par année";
             formsPlot1.Plot.Axes.Bottom.Label.Text = "Année";
-            formsPlot1.Plot.Axes.Left.Label.Text = "Distance (km)";
+            formsPlot1.Plot.Axes.Left.Label.Text = "Distance (km et miles)";
+            formsPlot1.Plot.Axes.AutoScale();
             formsPlot1.Refresh();
         }
 
@@ -419,6 +448,7 @@ namespace PTL
                         miles = csvData.ToDoubleArray("Mi", culture);
                         avgSpeedsKmh = csvData.ToDoubleArray("Average_speed_kmh", culture);
                         avgSpeedsMph = csvData.ToDoubleArray("Average_speed_mph", culture);
+                        teams = csvData.ToStringArray("Team");
 
                         var validYears = years.Where(y => !double.IsNaN(y)).Select(y => (int)Math.Floor(y)).ToArray();
                         int minYear = validYears.DefaultIfEmpty(DateTime.Now.Year).Min();
@@ -538,8 +568,8 @@ namespace PTL
             if (years == null || source == null) return Array.Empty<double>();
 
             int n = Math.Min(years.Length, source.Length);
-            int startYear = trackBar2?.Value ?? int.MinValue;
-            int endYear = trackBar1?.Value ?? int.MaxValue;
+            int startYear = trackBar2.Value;
+            int endYear = trackBar1.Value;
             if (startYear > endYear) (startYear, endYear) = (endYear, startYear);
 
             var values = Enumerable.Range(0, n)
@@ -570,11 +600,16 @@ namespace PTL
                 2 => " tours",
                 3 => " km",
                 4 => " victoires",
-                _ => string.Empty
+                _ => string.Empty // retourne une chaîne vide par défaut
             };
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdatePlot();
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             UpdatePlot();
         }
