@@ -868,23 +868,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\lucap\\.nuget\\packages\\": {},
+    "C:\\Users\\Maîntenant prêt\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
+      "projectUniqueName": "D:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
       "projectName": "PTL",
-      "projectPath": "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
-      "packagesPath": "C:\\Users\\lucap\\.nuget\\packages\\",
-      "outputPath": "H:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\obj\\",
+      "projectPath": "D:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\PTL.csproj",
+      "packagesPath": "C:\\Users\\Maîntenant prêt\\.nuget\\packages\\",
+      "outputPath": "D:\\323-programation fonctionnelle\\Projet\\323-Plot-those-lines\\PTL\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\lucap\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Maîntenant prêt\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

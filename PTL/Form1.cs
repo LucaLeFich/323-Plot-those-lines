@@ -40,7 +40,7 @@ namespace PTL
         private void Form1_Load(object sender, EventArgs e)
         {
             //--------------------------------------- !! A CHANGER SELON LA MACHINE !! ---------------------------------------\\
-            string csvPath = @"H:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\data_LeMans_race_winners.csv";
+            string csvPath = @"D:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\data_LeMans_race_winners.csv";
             csvData = LoadCsvToDataTable(csvPath);
 
             // Sans ça le programme confond "," et "."
@@ -76,11 +76,14 @@ namespace PTL
             lblRange = new System.Windows.Forms.Label
             {
                 AutoSize = true,
-                Location = new Point(603, trackBar2.Location.Y),
+                Location = new Point(0, trackBar2.Location.Y),
                 Text = $"{trackBar2.Value} — {trackBar1.Value}"
             };
             this.Controls.Add(lblRange);
             lblRange.BringToFront();
+
+            PositionRangeLabel();
+            this.Resize += (s, ev) => PositionRangeLabel();
 
             comboBox1.Items.Clear();
             comboBox1.Items.AddRange(new object[]
@@ -463,6 +466,7 @@ namespace PTL
                         trackBar1.Value = maxYear;
 
                         lblRange.Text = $"{trackBar2.Value} — {trackBar1.Value}";
+                        PositionRangeLabel();
 
                         UpdatePlot();
 
@@ -612,6 +616,18 @@ namespace PTL
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             UpdatePlot();
+        }
+
+        private void PositionRangeLabel()
+        {
+            if (lblRange == null || trackBar2 == null) return;
+
+            lblRange.AutoSize = true;
+
+            // centrer horizontalement
+            int x = Math.Max(0, (this.ClientSize.Width - lblRange.Width) / 2);
+
+            lblRange.Location = new Point(x, trackBar2.Location.Y);
         }
     }
 
