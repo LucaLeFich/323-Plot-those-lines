@@ -39,8 +39,7 @@ namespace PTL
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //--------------------------------------- !! A CHANGER SELON LA MACHINE !! ---------------------------------------\\
-            string csvPath = @"D:\323-programation fonctionnelle\Projet\323-Plot-those-lines\PTL\data_LeMans_race_winners.csv";
+            string csvPath = @"..\..\..\data_LeMans_race_winners.csv";
             csvData = LoadCsvToDataTable(csvPath);
 
             // Sans ça le programme confond "," et "."
