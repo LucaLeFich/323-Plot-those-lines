@@ -181,6 +181,7 @@ namespace PTL
             var ysMph = points.Select(p => p.Mph).ToArray();
 
             formsPlot1.Plot.Clear();
+            ResetLeftAxisTickGenerator();
 
             if (showBoth)
             {
@@ -240,6 +241,7 @@ namespace PTL
             var ys = points.Select(p => p.Value).ToArray();
 
             formsPlot1.Plot.Clear();
+            ResetLeftAxisTickGenerator();
 
             if (xs.Length > 0)
             {
@@ -267,6 +269,7 @@ namespace PTL
             bool showMiles = checkBox2?.Checked == true && miles?.Any(m => !double.IsNaN(m)) == true;
 
             formsPlot1.Plot.Clear();
+            ResetLeftAxisTickGenerator();
 
             // Afficher seulement les kms
             if (!showMiles)
@@ -627,6 +630,12 @@ namespace PTL
             int x = Math.Max(0, (this.ClientSize.Width - lblRange.Width) / 2);
 
             lblRange.Location = new Point(x, trackBar2.Location.Y);
+        }
+
+        private void ResetLeftAxisTickGenerator()
+        {
+            // Remet le générateur automatique de valeurs sur l'axe Y
+            formsPlot1.Plot.Axes.Left.TickGenerator = new ScottPlot.TickGenerators.NumericAutomatic();
         }
     }
 
